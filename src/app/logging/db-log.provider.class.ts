@@ -5,8 +5,9 @@ import { Log } from './log.class';
 
 export class DbLogProvider extends LogProvider {
 
-    log(message: any): Observable<boolean> {
+    writeLog(message: any, level: string): Observable<boolean> {
         let log = new Log((typeof message) == "string" ? message : JSON.stringify(message));
+        log.Level = level;
         return this.http.post("http://localhost:53911/api/logs", log) as Observable<boolean>
     }
 

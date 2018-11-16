@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoggingService } from './logging/logging.service';
-enum LogProviderOptions { Console, Db, All };
+import { LogProviderOptions } from './logging/log-providers-options.enum';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +9,15 @@ enum LogProviderOptions { Console, Db, All };
 })
 export class AppComponent {
   title = 'playground-for-testing';
+  obj = {
+    id: 0,
+    name: 'test'
+  };
 
   constructor(
     private logsvc: LoggingService
   ) {
     logsvc.addProviders(LogProviderOptions.Db);
-    logsvc.log("Logging service worked!")
-      .subscribe(rc => {
-        console.log("Log rc:", rc);
-      })
+    logsvc.log("Logging initialized ...");
   }
 }

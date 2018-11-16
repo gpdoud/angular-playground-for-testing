@@ -6,13 +6,15 @@ import { ConsoleLogProvider } from './console-log.provider.class';
 import { DbLogProvider } from './db-log.provider.class';
 import { Observable, of } from 'rxjs';
 
-enum LogProviderOptions { Console, Db, All }
+import { LogProviderOptions } from './log-providers-options.enum';
+//export enum LogProviderOptions { Console, Db, All }
+import { LogLevelOptions } from './log-level-options.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoggingService {
-
+  
 
   providers: LogProvider[] = [];
   addProviders(providers: LogProviderOptions) {
@@ -30,24 +32,29 @@ export class LoggingService {
     }
   }
 
-  log(msg: any): Observable<boolean> {
+  writeLog(msg: any, level: LogLevelOptions): Observable<boolean> {
     let bool = true;
     for(let p of this.providers) {
-      p.log(msg).subscribe(rc => { 
-        console.log(rc); 
+      p.writeLog(msg, level).subscribe(rc => { 
         bool = bool && rc; 
       });
     }
     return of(bool);
   }
-  info(msg) {
-    console.log(msg);
+  log(msg: any): Observable<boolean> {
+    return this.info(msg);
   }
-  warn(msg) {
-    console.warn(msg);
+  info(msg: any): Observable<boolean> {
+    return this.writeLog(msg, LogLevelOptions.Info);
   }
-  error(msg) {
-    console.error(msg);
+  warn(msg: any): Observable<boolean> {
+    return this.writeLog(msg, LogLevelOptions.Warn);
+  }
+  error(msg: any): Observable<boolean> {
+    return this.writeLog(msg, LogLevelOptions.Error);
+  }
+  fatal(msg: any): Observable<boolean> {
+    return this.writeLog(msg, LogLevelOptions.Fatal);
   }
 
   constructor(

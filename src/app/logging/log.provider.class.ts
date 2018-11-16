@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 
 export abstract class LogProvider {
 
-    abstract log(message: any): Observable<boolean>;
+    abstract writeLog(message: any, level: string): Observable<boolean>;
 
     constructor() {}
 }

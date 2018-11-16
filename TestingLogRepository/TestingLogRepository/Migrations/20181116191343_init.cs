@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TestingLogRepository.Migrations
 {
-    public partial class initialization : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,6 +15,7 @@ namespace TestingLogRepository.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Timestamp = table.Column<DateTime>(nullable: false),
+                    Level = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

@@ -10,8 +10,8 @@ using TestingLogRepository.Models;
 namespace TestingLogRepository.Migrations
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20181115172235_initialization")]
-    partial class initialization
+    [Migration("20181116191645_added stringlength and required to level and message")]
+    partial class addedstringlengthandrequiredtolevelandmessage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,13 @@ namespace TestingLogRepository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(10);
 
                     b.Property<DateTime>("Timestamp");
 
