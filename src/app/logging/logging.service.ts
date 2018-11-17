@@ -9,27 +9,44 @@ import { Observable, of } from 'rxjs';
 import { LogProviderOptions } from './log-providers-options.enum';
 //export enum LogProviderOptions { Console, Db, All }
 import { LogLevelOptions } from './log-level-options.enum';
+import { Log } from './log.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoggingService {
-  
 
   providers: LogProvider[] = [];
-  addProviders(providers: LogProviderOptions) {
-    switch(providers) {
-      case LogProviderOptions.Console:
+  addProviders(providers: LogProviderOptions, dbUrl: string = null) {
+    if(providers === LogProviderOptions.Console || providers === LogProviderOptions.All) {
         this.providers.push(new ConsoleLogProvider());
-        break;
-      case LogProviderOptions.Db: 
-        this.providers.push(new DbLogProvider(this.http));
-        break;
-      case LogProviderOptions.All:
-        this.providers.push(new ConsoleLogProvider());
-        this.providers.push(new DbLogProvider(this.http));
-      break;
+    } else if (providers === LogProviderOptions.Db || providers === LogProviderOptions.All) {
+      if(dbUrl == null) {
+        console.error("dbUrl must be set to use Db-log provider. Db option not set.");
+        return;
+      }
+      this.providers.push(new DbLogProvider(this.http, dbUrl));
     }
+  }
+
+  private getDbLogProvider(): DbLogProvider {
+    for(let provider of this.providers) {
+      let dbLogProvider = provider as DbLogProvider;
+      if(dbLogProvider !== null) {
+        return dbLogProvider;
+      }
+    }
+    return null;
+  }
+
+  listDbLog(): Observable<Log[]> {
+    let dbLogProvider = this.getDbLogProvider();
+    if(dbLogProvider === null) {
+      console.error("No DbLogProvider found");
+      let emptyLog: Log[] = [];
+      return of(emptyLog);
+    }
+    return dbLogProvider.listLog();
   }
 
   writeLog(msg: any, level: LogLevelOptions): Observable<boolean> {

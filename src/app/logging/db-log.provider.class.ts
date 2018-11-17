@@ -8,11 +8,16 @@ export class DbLogProvider extends LogProvider {
     writeLog(message: any, level: string): Observable<boolean> {
         let log = new Log((typeof message) == "string" ? message : JSON.stringify(message));
         log.Level = level;
-        return this.http.post("http://localhost:53911/api/logs", log) as Observable<boolean>
+        return this.http.post(this.dbUrl, log) as Observable<boolean>
+    }
+
+    listLog(): Observable<Log[]> {
+        return this.http.get(this.dbUrl) as Observable<Log[]>;
     }
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private dbUrl: string = null
     ) {
         super();
     }

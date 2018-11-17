@@ -17,7 +17,8 @@ export class AppComponent {
   constructor(
     private logsvc: LoggingService
   ) {
-    logsvc.addProviders(LogProviderOptions.Db);
+    let dbUrl = "http://localhost:53911/api/logs";
+    logsvc.addProviders(LogProviderOptions.Db, dbUrl);
     logsvc.log("Logging initialized ...");
   }
 }
