@@ -1,12 +1,14 @@
 <div>
   <h3>Logging List</h3>
   <table class="table table-sm">
+    <tr>
+      <td>Log</td>
+    </tr>
     <tr *ngFor="let log of logs">
-      <td>{{ log.id }}</td>
-      <td>{{ log.timestamp }}</td>
-      <td>{{ log.level }}</td>
-      <td>{{ log.message }}</td>
+      <td>{{ log.id }} |
+      {{ log.timestamp }} |
+      {{ log.level }} |
+      {{ log.message }}</td>
     </tr>
   </table>
-  <h3>End of table</h3>
 </div>
